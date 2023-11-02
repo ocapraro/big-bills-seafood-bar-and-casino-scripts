@@ -81,7 +81,8 @@ def reload():
   display_header()
   print("Reloading...")
   code = success(os.popen("sudo ufw reload").read())
-  display_header("Success!")
+  display_header()
+  print("Success!")
   return code
 
 def title(text):
