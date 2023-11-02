@@ -87,6 +87,7 @@ def main():
       code = allow_service("http")
     elif choice == 5:
       code = check_status()
+    input("")
   print("Successfully Exited")
   
   
