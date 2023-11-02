@@ -45,7 +45,7 @@ def allow_ip(ip):
   return allow_service(f"from {ip}")
 
 def check_status():
-  status = os.popen("sudo ufw status").read()
+  status = os.popen("sudo ufw status verbose").read()
   display_header()
   print("Checking status...")
   print(status)
