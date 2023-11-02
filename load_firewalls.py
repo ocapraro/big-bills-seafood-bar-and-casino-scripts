@@ -10,6 +10,7 @@ def install():
   for i in "12345":
     ufw_installed = os.popen("sudo ufw status").read()
     if success(ufw_installed):
+      print("ufw Installed")
       return True
     display_header()
     input("ufw not found, retrying")
@@ -24,9 +25,12 @@ def install():
 
 def enable_defaults():
   # Enable ufw
-  return success(os.popen("sudo ufw enable").read()) and \
+  print("Enabling default firewall settings")
+  code =  success(os.popen("sudo ufw enable").read()) and \
   success(os.popen("sudo ufw default deny incoming").read()) and \
   success(os.popen("sudo ufw default allow outgoing").read())
+  print("Enabled")
+  return code
 
 
   
@@ -53,11 +57,11 @@ def title(text):
 def display_header():
   os.system("clear")
   title("Linux Firewall Setup")
+  print("")
 
 def display_menu():
   display_header()
-  print("""
-  0. Exit
+  print("""  0. Exit
   1. Initialize ufw
   2. Allow ip
   3. Allow ssh
@@ -76,6 +80,7 @@ def main():
     if choice == 0:
       break
     elif choice == 1:
+      display_header()
       code = install()
       if code:
         code = enable_defaults()
