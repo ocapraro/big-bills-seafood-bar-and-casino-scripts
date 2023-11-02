@@ -2,7 +2,7 @@ import os
 import re
 
 def success(output):
-  return len(re.findall(r"command not found", output))>0
+  return not len(re.findall(r"command not found", output))>0
 
 def install():
   # Install ufw
@@ -10,7 +10,6 @@ def install():
     ufw_installed = os.popen("sudo ufw status").read()
     if success(ufw_installed):
       return True
-    input(ufw_installed)
     os.system("clear")
     input("ufw not found, retrying")
     install_ufw = os.popen("sudo apt-get ufw").read()
