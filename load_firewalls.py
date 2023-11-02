@@ -10,6 +10,7 @@ def install():
     ufw_installed = os.popen("sudo ufw status").read()
     if success(ufw_installed):
       return True
+    input(ufw_installed)
     os.system("clear")
     input("ufw not found, retrying")
     install_ufw = os.popen("sudo apt-get ufw").read()
