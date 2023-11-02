@@ -28,6 +28,23 @@ def enable_defaults():
   success(os.popen("sudo ufw default deny incoming").read()) and \
   success(os.popen("sudo ufw default allow outgoing").read())
 
+
+  
+def allow_service(service):
+  display_header()
+  print(f"Allowing {service}")
+  return success(os.popen(f"sudo ufw allow {service}").read())
+
+def allow_ip(ip):
+  allow_service(f"from {ip}")
+
+def check_status():
+  status = os.popen("sudo ufw status").read()
+  display_header()
+  print("Checking status...")
+  print(status)
+  return success(status)
+
 def title(text):
   print("="*(32+len(text)))
   print("="*15,"\033[32m"+text+"\033[0m","="*15)
@@ -42,10 +59,15 @@ def display_menu():
   print("""
   0. Exit
   1. Initialize ufw
+  2. Allow ip
+  3. Allow ssh
+  4. Allow http
+  5. Check status
 """)
 
 def main():
-  while 1:
+  code = True
+  while code:
     display_menu()
     try:
       choice = int(input("Select an option: "))
@@ -54,11 +76,17 @@ def main():
     if choice == 0:
       break
     elif choice == 1:
-      code = True
+      code = install()
       if code:
-        code = install()
-        if code:
-          code = enable_defaults()
+        code = enable_defaults()
+    elif choice == 2:
+      code = allow_ip(input("Enter the IP: "))
+    elif choice == 3:
+      code = allow_service("ssh")
+    elif choice == 4:
+      code = allow_service("http")
+    elif choice == 5:
+      code = check_status()
   print("Successfully Exited")
   
   
