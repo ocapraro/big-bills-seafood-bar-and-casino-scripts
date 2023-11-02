@@ -37,10 +37,12 @@ def enable_defaults():
 def allow_service(service):
   display_header()
   print(f"Allowing {service}")
-  return success(os.popen(f"sudo ufw allow {service}").read())
+  code = success(os.popen(f"sudo ufw allow {service}").read())
+  print(f"{service} allowed")
+  return code
 
 def allow_ip(ip):
-  allow_service(f"from {ip}")
+  return allow_service(f"from {ip}")
 
 def check_status():
   status = os.popen("sudo ufw status").read()
@@ -48,6 +50,39 @@ def check_status():
   print("Checking status...")
   print(status)
   return success(status)
+
+def deny_service(service):
+  display_header()
+  print(f"Denying {service}")
+  code = success(os.popen(f"sudo ufw delete allow {service}").read())
+  print(f"{service} denied")
+  return code
+
+def deny_ip(ip):
+  return deny_service(f"from {ip}")
+
+def enable_logs():
+  display_header()
+  print("Enabling logs")
+  code = success(os.popen("sudo ufw logging on").read())
+  display_header()
+  print("Enabled! The logs can be found in /var/log/ufw.log")
+  return code
+
+def disable_logs():
+  display_header()
+  print("Disable logs")
+  code = success(os.popen("sudo ufw logging off").read())
+  display_header()
+  print("Disabled")
+  return code
+
+def reload():
+  display_header()
+  print("Reloading...")
+  code = success(os.popen("sudo ufw reload").read())
+  display_header("Success!")
+  return code
 
 def title(text):
   print("="*(32+len(text)))
@@ -63,10 +98,15 @@ def display_menu():
   display_header()
   print("""  0. Exit
   1. Initialize ufw
-  2. Allow ip
+  2. Allow IP
   3. Allow ssh
   4. Allow http
   5. Check status
+  6. Deny IP
+  7. Deny Service
+  8. Enable logs
+  9. Disable logs
+ 10. Reload
 """)
 
 def main():
@@ -92,6 +132,16 @@ def main():
       code = allow_service("http")
     elif choice == 5:
       code = check_status()
+    elif choice == 6:
+      code = deny_ip(input("Enter the IP: "))
+    elif choice == 7:
+      code = deny_service(input("Enter the Service: "))
+    elif choice == 8:
+      code = enable_logs()
+    elif choice == 9:
+      code = disable_logs()
+    elif choice == 10:
+      code = reload()
     input("")
   print("Successfully Exited")
   
